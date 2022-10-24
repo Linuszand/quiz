@@ -5,7 +5,7 @@ import json
 import requests
 import pprint
 import random
-
+random.sample
 
 # 1. Programmet kraschar ibland om jag råkar trycka på retur utan att ha skrivit in något eller om jag skriver något annat än siffror. Om frågan har 4 svar skall bara siffrorna 1-4 accepteras som input.
 # 2. Välj ut 10 slumpmässiga frågor av dem ni får från APIet.
@@ -39,8 +39,8 @@ def main():
 
         print(f'Fråga. {a + 1} [{percent}% har svarat rätt] {quest} ')
 
-
-        for i, answer in enumerate(q['answers']):  # En loop med ett index(i) som startar på 1, och som tar ut element från nyckeln 'answers'
+        answers = q['answers']
+        for i, answer in enumerate(answers):  # En loop med ett index(i) som startar på 1, och som tar ut element från nyckeln 'answers'
             print(f"{i + 1}. {answer['answer']}")
 
         while True:
