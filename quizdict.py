@@ -1,40 +1,86 @@
 # coding=utf8
 from getmethods import get_questions_data, print_answers_loop, get_answers_data, get_selected_answer, \
     score_plus_and_print_correct_answer, get_correct_answer, score_plus_and_print_wrong_answer
+import json
+import requests
+import pprint
+import random
+
+
+# 1. Programmet kraschar ibland om jag råkar trycka på retur utan att ha skrivit in något eller om jag skriver något annat än siffror. Om frågan har 4 svar skall bara siffrorna 1-4 accepteras som input.
+# 2. Välj ut 10 slumpmässiga frågor av dem ni får från APIet.
+# 3. När jag besvarat alla frågor vill jag att programmet skriver ut de frågor jag svarade fel på tillsammans med det rätta svaret.
+
+
+def get_percent(a, b):
+    return 100 * a / b
 
 
 def main():
-    data = get_questions_data()  # Tar ut informationen från url:en med hjälp av requests och gör om det till json() så att vi kan använda informationen.
+    url = 'https://bjornkjellgren.se/quiz/v2/questions'
+    results = requests.get(url)
+    data = results.json()
 
-    score = 0  # En variabel med värdet 0 int
+    wrong_questions_list = []
 
-    for a, question in enumerate(data['questions'], start=1): # En loop som tar datan från en lång lista med frågor
-        print(f"Fråga {a}.") # printar ut Fråga. och index som har start 1
-        print(question['prompt'])  # printar ut alla frågar var för sig i en loop
+    score = 0
+    for a, question in enumerate(random.sample(data['questions'], 10)):  # En loop med ett index(a) som startar på 1, och som tar ut all data från nyckeln 'questions'
 
-        print_answers_loop(question)  # Skriver ut svaren för varje enskild fråga
+        q = data['questions'][a] # q tar ut varje element från nyckeln 'answers' först data['questions'][0], sen data['questions'][1] osv...
 
-        user_input = int(input(">>>"))  # Variabeln user_input får det värde vi väljer att skriva in
 
-        answers = get_answers_data(question)  # Tar ut all data i 'answer' nycklarna
+        hela = int(question['times_asked'])
+        delen = int(question['times_correct'])
 
-        selected_answer = get_selected_answer(answers, user_input)  # Det vi skrev in i user_input variabeln konsollen. Det svaret du skrev in: (1,2,3 eller 4) minus ett i index
+        percent = int(get_percent(delen, hela))
 
-        if selected_answer['correct']:  # Om det svaret man gissade på har värdet True i 'correct' nycklarna så kör den koden nedan
+        quest = (q['prompt'])
 
-            score = score_plus_and_print_correct_answer(score)  # Printar ut om man hade rätt samt poäng efter svaret
 
+        print(f'Fråga. {a + 1} [{percent}% har svarat rätt] {quest} ')
+
+
+        for i, answer in enumerate(q['answers']):  # En loop med ett index(i) som startar på 1, och som tar ut element från nyckeln 'answers'
+            print(f"{i + 1}. {answer['answer']}")
+
+        while True:
+            user_input = (input(">>"))
+            try:
+                user_input = int(user_input)
+
+            except ValueError:
+                pass
+            if user_input in range(1, len(q['answers']) + 1):
+                break
+            print(f"Skriv ett nummer mellan 1 - {len(q['answers'])}")
+
+        answers = question['answers']
+
+        selected_answer = answers[user_input - 1]
+
+        if selected_answer['correct']:
+            score = score + 1
+
+            print("")
+            print(f"Rätt svar! Du har {score} poäng.\n")
         else:
-            for i, answer in enumerate(question['answers']):  # en loop som tar ut datan från nyckeln 'answers'
+            for i, answer in enumerate(question['answers']):
 
-                correct_answer = get_correct_answer(answers, i)  # Tar ut alla nyckar från 'answer' som vi sedan använder i if satsen nedan
+                if answers[i]['correct']:
+                    your_answer = selected_answer['answer']
+                    correct_answer = answers[i]['answer']
+                    print("")
+                    print(f"Fel! Rätt svar är: {correct_answer}")
+                    print(f"Du har {score} poäng.")
+                    wrong_questions_list.append((q['prompt'], your_answer, correct_answer)) # tar ut alla frågor, alla rätta svar och varje svar användaren gav på varje fråga och lägger sedan in dem i listan
+            print(f"Ditt svar: {your_answer}\n")
 
-                if answers[i]['correct']:  # Loopar igenom varje 'correct' nyckel och printar bara ut det om värdet är True
+    print(f"Du har sammanlagt fått {score} poäng av {a + 1}\n")
+    print(f"Du svarade fel på dessa frågor: ")
+    for item in wrong_questions_list:
+        print(item[0])  # itererar igenom listan(wrong_questions_list) element 0 som är [q['prompt']
+        print(f"Ditt svar: {item[1]}")
+        print(f"Rätt svar: {item[2]}\n")
 
-                    score_plus_and_print_wrong_answer(correct_answer, score)  # Printar ut om man hade fel och vilket svar som var rätt samt vilket poäng man har efter svaret
 
-    print(f"Du har sammanlagt fått {score} poäng av {a}. ")
-
-
-if __name__ == '__main__':
-    main()
+main()
