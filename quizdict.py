@@ -30,7 +30,7 @@ def main():
     for a, question in enumerate(random.sample(data['questions'], 10)):  # En loop med ett index(a) som startar på 1, och som tar ut all data från nyckeln 'questions'
 
         # q = data['questions'][a] # q tar ut varje element från nyckeln 'answers' först data['questions'][0], sen data['questions'][1] osv...
-        # q gjorde så att det fel uppstod, men jag vet inte exakt varför. När jag tog bort q fixade allt sig i alla fall!
+        # q gjorde så att ett fel uppstod, men jag vet inte exakt varför. När jag tog bort q fixade allt sig i alla fall!
 
         hela = int(question['times_asked']) # Tar nyckeln 'times_asked' som har ett nummer i sig och konverterar det till int
         delen = int(question['times_correct']) # Tar nyckeln 'times_correct' som har ett nummer i sig och konverterar det till int
