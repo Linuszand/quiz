@@ -12,15 +12,17 @@ import random
 # 3. När jag besvarat alla frågor vill jag att programmet skriver ut de frågor jag svarade fel på tillsammans med det rätta svaret.
 
 
-def get_percent(a, b):
+def get_percent(a, b): # Gör om a delat på b till procent-form
     return 100 * a / b
 
-
-def main():
+def get_url(): # Hämtar alla data från urlen och gör om datan till json
     url = 'https://bjornkjellgren.se/quiz/v2/questions'
     results = requests.get(url)
     data = results.json()
-    pprint.pprint(data)
+    return data
+def main():
+    data = get_url()
+
 
     wrong_questions_list = []
 
@@ -33,7 +35,7 @@ def main():
         hela = int(question['times_asked']) # Tar nyckeln 'times_asked' som har ett nummer i sig och konverterar det till int
         delen = int(question['times_correct']) # Tar nyckeln 'times_correct' som har ett nummer i sig och konverterar det till int
 
-        percent = int(get_percent(delen, hela))  #  Kallar på get_percent funktionen som har som uppgift att dividera delen i det hela och lägger resultat i en variabel som heter percent
+        percent = int(get_percent(delen, hela))  #  Kallar på get_percent funktionen som har som uppgift att dividera delen i det hela och lägger resultat i en variabel som heter percent samt gör om det till int
 
         quest = (question['prompt']) # Tar nyckeln 'prompt' och lägger det i variabeln quest
 
@@ -81,6 +83,9 @@ def main():
         print(item[0])  # itererar igenom listan(wrong_questions_list) element 0 som är [q['prompt']
         print(f"Ditt svar: {item[1]}")
         print(f"Rätt svar: {item[2]}\n")
+
+
+
 
 
 main()
