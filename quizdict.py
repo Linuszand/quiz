@@ -7,13 +7,10 @@ import pprint
 import random
 
 
-# 1. Programmet kraschar ibland om jag råkar trycka på retur utan att ha skrivit in något eller om jag skriver något annat än siffror. Om frågan har 4 svar skall bara siffrorna 1-4 accepteras som input.
-# 2. Välj ut 10 slumpmässiga frågor av dem ni får från APIet.
-# 3. När jag besvarat alla frågor vill jag att programmet skriver ut de frågor jag svarade fel på tillsammans med det rätta svaret.
-
 
 def get_percent(a, b): # Gör om a delat på b till procent-form
     return 100 * a / b
+
 
 def get_percent_variable(question):
     hela = int(question['times_asked'])  # Tar nyckeln 'times_asked' som har ett nummer i sig och konverterar det till int
@@ -22,7 +19,7 @@ def get_percent_variable(question):
     return percent
 
 
-def get_url(): # Hämtar alla data från urlen och gör om datan till json
+def get_url():  # Hämtar alla data från urlen och gör om datan till json
     url = 'https://bjornkjellgren.se/quiz/v2/questions'
     results = requests.get(url)
     data = results.json()
@@ -30,33 +27,22 @@ def get_url(): # Hämtar alla data från urlen och gör om datan till json
     return data
 
 
-
-
-
-
-
 def main():
     data = get_url()
 
-
     wrong_questions_list = []
-
 
     url = 'https://bjornkjellgren.se/quiz/v2/questions'
     params = {
         'id': 11, 'correct': True
-
     }
-    data_in = requests.post(url, json=(params))
 
-    print(data_in.text)
+    res = requests.post(url, json=params)
 
-
+    print(res.text)
 
     score = 0
     for a, question in enumerate(random.sample(data['questions'], 10)):  # En loop med ett index(a) som startar på 1, och som tar ut all data från nyckeln 'questions'
-
-
 
         percent = get_percent_variable(question)
         quest = (question['prompt']) # Tar nyckeln 'prompt' och lägger det i variabeln quest
@@ -65,7 +51,6 @@ def main():
         answers = question['answers']
         for i, answer in enumerate(answers):  # En loop med ett index(i) som startar på 1, och som tar ut element från nyckeln 'answers'
             print(f"{i + 1}. {answer['answer']}")
-
 
         while True:
             user_input = (input(">>"))
