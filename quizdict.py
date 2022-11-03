@@ -7,7 +7,6 @@ import pprint
 import random
 
 
-
 def get_percent(a, b): # Gör om a delat på b till procent-form
     return 100 * a / b
 
