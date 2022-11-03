@@ -92,7 +92,4 @@ def main():
         print(f"Rätt svar: {item[2]}\n")
 
 
-
-
-
 main()
