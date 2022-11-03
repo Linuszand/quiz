@@ -15,6 +15,13 @@ import random
 def get_percent(a, b): # Gör om a delat på b till procent-form
     return 100 * a / b
 
+def get_percent_variable(question):
+    hela = int(question['times_asked'])  # Tar nyckeln 'times_asked' som har ett nummer i sig och konverterar det till int
+    delen = int(question['times_correct'])  # Tar nyckeln 'times_correct' som har ett nummer i sig och konverterar det till int
+    percent = int(get_percent(delen, hela))  # Kallar på get_percent funktionen som har som uppgift att dividera delen i det hela och lägger resultat i en variabel som heter percent samt gör om det till int
+    return percent
+
+
 def get_url(): # Hämtar alla data från urlen och gör om datan till json
     url = 'https://bjornkjellgren.se/quiz/v2/questions'
     results = requests.get(url)
@@ -22,37 +29,43 @@ def get_url(): # Hämtar alla data från urlen och gör om datan till json
     pprint.pprint(data)
     return data
 
-def post_times_asked():
-    url = 'https://bjornkjellgren.se/quiz/v2/questions'
-    requests.post(url, json={'id': 11,  'correct': True})
-    data_in = requests
-    return data_in
+
+
+
+
 
 
 def main():
     data = get_url()
 
-    post_list = []
+
     wrong_questions_list = []
+
+
+    url = 'https://bjornkjellgren.se/quiz/v2/questions'
+    params = {
+        'id': 11, 'correct': True
+
+    }
+    data_in = requests.post(url, json=(params))
+
+    print(data_in.text)
+
+
 
     score = 0
     for a, question in enumerate(random.sample(data['questions'], 10)):  # En loop med ett index(a) som startar på 1, och som tar ut all data från nyckeln 'questions'
 
-        # q = data['questions'][a] # q tar ut varje element från nyckeln 'answers' först data['questions'][0], sen data['questions'][1] osv...
-        # q gjorde så att det fel uppstod, men jag vet inte exakt varför. När jag tog bort q fixade allt sig i alla fall!
 
-        hela = int(question['times_asked']) # Tar nyckeln 'times_asked' som har ett nummer i sig och konverterar det till int
-        delen = int(question['times_correct']) # Tar nyckeln 'times_correct' som har ett nummer i sig och konverterar det till int
 
-        percent = int(get_percent(delen, hela))  #  Kallar på get_percent funktionen som har som uppgift att dividera delen i det hela och lägger resultat i en variabel som heter percent samt gör om det till int
-
+        percent = get_percent_variable(question)
         quest = (question['prompt']) # Tar nyckeln 'prompt' och lägger det i variabeln quest
 
         print(f'Fråga. {a+1} [{percent}% har svarat rätt] {quest} ') # printar ut alla
-
         answers = question['answers']
         for i, answer in enumerate(answers):  # En loop med ett index(i) som startar på 1, och som tar ut element från nyckeln 'answers'
             print(f"{i + 1}. {answer['answer']}")
+
 
         while True:
             user_input = (input(">>"))
@@ -70,9 +83,8 @@ def main():
         selected_answer = answers[user_input - 1]
 
         if selected_answer['correct']:
-            post_times_asked()
-            score = score + 1
 
+            score = score + 1
             print("")
             print(f"Rätt svar! Du har {score} poäng.\n")
         else:
@@ -81,8 +93,9 @@ def main():
                 if answers[i]['correct']:
                     your_answer = selected_answer['answer']
                     correct_answer = answers[i]['answer']
+
                     print("")
-                    print(f"Fel! Rätt svar är: {correct_answer}")
+                    print(f"Fel! Rätt svar är: . {correct_answer}")
                     print(f"Du har {score} poäng.")
                     wrong_questions_list.append((question['prompt'], your_answer, correct_answer)) # tar ut alla frågor, alla rätta svar och varje svar användaren gav på varje fråga och lägger sedan in dem i listan
             print(f"Ditt svar: {your_answer}\n")
