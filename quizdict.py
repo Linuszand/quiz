@@ -7,7 +7,7 @@ import pprint
 import random
 
 
-def get_percent(a, b): # Gör om a delat på b till procent-form
+def get_percent(a, b):  # Gör om a delat på b till procent-form
     return 100 * a / b
 
 
@@ -30,21 +30,22 @@ def main():
     data = get_url()
 
     wrong_questions_list = []
-
-    url = 'https://bjornkjellgren.se/quiz/v2/questions'
-    params = {
+    l = []
+    data_in = {
         'id': 11, 'correct': True
     }
+    url = 'https://bjornkjellgren.se/quiz/v2/questions'
+    res = requests.post(url, json=data_in)
 
-    res = requests.post(url, json=params)
-
-    print(res.text)
+    print(res.url)
 
     score = 0
-    for a, question in enumerate(random.sample(data['questions'], 10)):  # En loop med ett index(a) som startar på 1, och som tar ut all data från nyckeln 'questions'
+    for a, question in enumerate(random.sample(data['questions'], 10)):  # En loop med ett index(a) som startar på 0, och som tar ut all data från nyckeln 'questions'
+
 
         percent = get_percent_variable(question)
         quest = (question['prompt']) # Tar nyckeln 'prompt' och lägger det i variabeln quest
+
 
         print(f'Fråga. {a+1} [{percent}% har svarat rätt] {quest} ') # printar ut alla
         answers = question['answers']
@@ -85,11 +86,17 @@ def main():
             print(f"Ditt svar: {your_answer}\n")
 
     print(f"Du har sammanlagt fått {score} poäng av {a + 1}\n")
-    print(f"Du svarade fel på dessa frågor: ")
+    if score < 10:
+        print(f"Du svarade fel på dessa frågor: ")
+    elif score == 10:
+        print("Du hade rätt på alla frågor!")
+    else:
+        print("??")
     for item in wrong_questions_list:
         print(item[0])  # itererar igenom listan(wrong_questions_list) element 0 som är [q['prompt']
         print(f"Ditt svar: {item[1]}")
         print(f"Rätt svar: {item[2]}\n")
+
 
 
 main()
