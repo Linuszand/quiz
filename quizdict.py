@@ -42,7 +42,7 @@ def get_user_answer(max_num: int, prompt: str) -> int:
             user_input = int(user_input)
         except ValueError:
             pass
-        if user_input in range(1, max_num):
+        if user_input in range(1, max_num + 1):
             break
         print(f"Skriv ett nummer mellan 1 - {max_num}")
     return user_input
@@ -101,4 +101,5 @@ def main():
         print(f"Rätt svar: {item[2]}\n")
 
 
-main()
+if __name__ == '__main__':
+    main()
