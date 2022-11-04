@@ -24,7 +24,6 @@ def get_url():  # Hämtar alla data från urlen och gör om datan till json
     URL = 'https://bjornkjellgren.se/quiz/v2/questions'
     results = requests.get(URL)
     data = results.json()
-    pprint.pprint(data)
     return data
 
 
