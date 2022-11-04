@@ -73,9 +73,6 @@ def main():
         print(len(question['answers']))
         user_input = get_user_answer(len(question['answers']), ">>")
 
-        # Ersätt nedan med en funktion som get_user_answer(max_num: int, prompt: str) -> int
-
-
         answers = question['answers']
 
         selected_answer = answers[user_input - 1]
@@ -90,18 +87,6 @@ def main():
             print_correct_answers(question)
             correct_answer, your_answer = get_your_and_correct_answer(answers, i, selected_answer)
             wrong_questions_list.append((question['prompt'], your_answer, correct_answer))
-            # Här skriver vi ut att vi svarade fel
-            # Skapa funktion som tar hela frågan och skriver ut rätt svarsalternativ
-
-            # for i, answer in enumerate(question['answers']):
-
-            #     if answers[i]['correct']:
-
-            #         print("")
-            #         print(f"Fel! Rätt svar är: {correct_answer}")
-            #         print(f"Du har {score} poäng.")
-             # tar ut alla frågor, alla rätta svar och varje svar användaren gav på varje fråga och lägger sedan in dem i listan
-            # print(f"Ditt svar: {your_answer}\n")
 
     print(f"Du har sammanlagt fått {score} poäng av {a + 1}\n")
     if score < 10:
