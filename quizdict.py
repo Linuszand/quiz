@@ -28,11 +28,9 @@ def get_url():  # Hämtar alla data från urlen och gör om datan till json
 
 
 def print_correct_answers(question):
-    # Här kanske vi vill skriva ut någonting i stil med "rätt svar är:"
     for answer in question['answers']:
         if answer['correct']:
             print(f"Fel! Rätt svar är: {answer['answer']}")
-        # Skriv bara ut svaret om det är rätt
 
 
 def get_user_answer(max_num: int, prompt: str) -> int:
