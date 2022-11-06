@@ -1,12 +1,10 @@
 # coding=utf8
-# from getmethods import get_questions_data, print_answers_loop, get_answers_data, get_selected_answer, \
-#     score_plus_and_print_correct_answer, get_correct_answer, score_plus_and_print_wrong_answer
+from geturl import get_url, get_postapi_false, get_postapi_true
 import json
 import requests
 import pprint
 import random
 
-URL = 'https://bjornkjellgren.se/quiz/v2/questions'
 
 
 #  Ger tillbaks en siffra mellan 0-100
@@ -23,11 +21,7 @@ def get_percent_var(question):
 
 
 #  Hämtar all data från API:et
-def get_url():  # Hämtar alla data från urlen och gör om datan till json
-    URL = 'https://bjornkjellgren.se/quiz/v2/questions'
-    results = requests.get(URL)
-    data = results.json()
-    return data
+
 
 
 # Skriver ut "Fel! Rätt svar är: rätta svaret"
@@ -58,14 +52,6 @@ def get_your_and_correct_answer(answers, i, selected_answer):  # Hämtar rätt s
     return correct_answer, your_answer
 
 
-def get_postapi_false(question):
-    requests.post(URL, json={'id': question['id'], 'correct': False})
-
-
-def get_postapi_true(question):
-    requests.post(URL, json={'id': question['id'], 'correct': True})
-
-
 def main():
 
     data = get_url()
@@ -82,7 +68,6 @@ def main():
         answers = question['answers']
         for i, answer in enumerate(answers):  # En loop med ett index(i) som startar på 1, och som tar ut element från nyckeln 'answers'
             print(f"{i + 1}. {answer['answer']}")
-
 
         user_input = get_user_answer(len(question['answers']), ">>")
 
