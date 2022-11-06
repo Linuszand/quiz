@@ -114,8 +114,5 @@ def main():
         print(f"Rätt svar: {item[2]}\n")
 
 
-
-
-
 if __name__ == '__main__':
     main()
