@@ -6,7 +6,6 @@ import pprint
 import random
 
 
-
 #  Ger tillbaks en siffra mellan 0-100
 def get_percent(a, b):
     return 100 * (a / b)
@@ -18,10 +17,6 @@ def get_percent_var(question):
     delen = int(question['times_correct'])  # Tar nyckeln 'times_correct' som har ett nummer i sig och konverterar det till int
     percent = int(get_percent(delen, hela))  # Kallar på get_percent funktionen som har som uppgift att dividera delen i det hela och lägger resultat i en variabel som heter percent samt gör om det till int
     return percent
-
-
-#  Hämtar all data från API:et
-
 
 
 # Skriver ut "Fel! Rätt svar är: rätta svaret"
