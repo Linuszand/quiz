@@ -8,6 +8,6 @@ def test_get_percent_low():
 def test_get_percent_high():
     assert get_percent(1000000000, 2000000000) == 50
 
-def test_get_percent_b_a():
+def test_get_percent_reverse():
     assert get_percent(2, 1) == 200
 
